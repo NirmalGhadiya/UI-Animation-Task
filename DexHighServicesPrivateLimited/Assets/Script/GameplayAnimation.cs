@@ -33,7 +33,8 @@ public class GameplayAnimation : MonoBehaviour
     private int _currentIndex = 0;
     private bool _isPanelOpened = false;
     private bool _isAnimationPlaying = false;
-
+    private bool _isIconAnimationPlaying = false;
+    
     #endregion
 
     #region PROTECTED_VARS
@@ -80,7 +81,7 @@ public class GameplayAnimation : MonoBehaviour
     private void MoveIcons(int index)
     {
         Debug.LogError(_currentIndex + " | " + index);
-        if (!_isPanelOpened || _currentIndex == index)
+        if (!_isPanelOpened || _currentIndex == index || _isIconAnimationPlaying)
             return;
 
         StopAllCoroutines();
@@ -155,6 +156,8 @@ public class GameplayAnimation : MonoBehaviour
 
     private IEnumerator DoAnimateIconsSelectImageRotation(int index, float endAngle)
     {
+        _isIconAnimationPlaying = true;
+
         float i = 0;
         float rate = 1 / animationTime;
 
@@ -176,6 +179,8 @@ public class GameplayAnimation : MonoBehaviour
 
         listTransformIconImages[index].localScale = (oneVector * listIconsTargetScale[_listIconsCurrentAngleIndex[index]]);
         listTransformIcons[index].rotation = Quaternion.Euler(0, 0, endAngle);
+
+        _isIconAnimationPlaying = false;
     }
 
     private IEnumerator DoAnimateIconsImageRotation(int index, float endAngle, bool isRevers = false)
